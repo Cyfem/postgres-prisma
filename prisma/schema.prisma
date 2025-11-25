@@ -11,10 +11,25 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model users {
+model User {
   id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  image     String
+  username  String   @unique
+  password  String
+  email     String?
   createdAt DateTime @default(now())
+  GameScore GameScore[]
+
+  @@map("users")
+}
+
+model GameScore {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  level     Int
+  score     Int
+  waves     Int
+  createdAt DateTime @default(now())
+
+  @@map("game_scores")
 }
